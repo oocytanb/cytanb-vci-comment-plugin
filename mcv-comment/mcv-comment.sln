@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CytanbVciCommentSourcePlugin", "CytanbVciCommentSourcePlugin\CytanbVciCommentSourcePlugin.fsproj", "{54CF98CF-4C6C-45C4-AD3A-27342896662C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DD6DA9F9-05D4-46DB-961E-07F0298B8075}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54CF98CF-4C6C-45C4-AD3A-27342896662C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54CF98CF-4C6C-45C4-AD3A-27342896662C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54CF98CF-4C6C-45C4-AD3A-27342896662C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54CF98CF-4C6C-45C4-AD3A-27342896662C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB48EDA1-ACD8-4C5B-974C-C2B629B212E1}
+	EndGlobalSection
+EndGlobal

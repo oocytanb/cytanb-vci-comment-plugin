@@ -1,0 +1,12 @@
+# [.editorconfig](https://aka.ms/editorconfigdocs)
+
+root = true
+
+# All files
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+
+[*.{resx,xaml}]
+end_of_line = crlf
