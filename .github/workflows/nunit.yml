@@ -1,0 +1,42 @@
+name: NUnit
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        working-directory: ./mcv-comment
+
+    env:
+      configuration_name: Release
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.0.1
+
+      - name: Download
+        shell: bash
+        run: |
+          curl http://int-main.net/app/MultiCommentViewer_v0.5.29_stable.zip >> mcv.zip
+
+      - name: Extract
+        run: |
+          Expand-Archive -Path ./mcv.zip -DestinationPath ./lib/mcv
+          rm ./mcv.zip
+
+      - name: Build
+        run: |
+          dotnet restore
+          msbuild -p:Configuration=${env:configuration_name}
+
+      - name: Test
+        run: dotnet test -c ${env:configuration_name}

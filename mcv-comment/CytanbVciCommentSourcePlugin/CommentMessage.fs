@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2020 oO (https://github.com/oocytanb)
+// The plugin interface is derived from [MultiCommentViewer | Copyright (c) ryu-s](https://github.com/CommentViewerCollection/MultiCommentViewer)
+
 namespace CytanbVciCommentSourcePlugin
 
 open System.Text.RegularExpressions
@@ -53,7 +57,7 @@ module CommentMessageConverter =
         ]
 
     let private parseNicoLiveItem text =
-        Regex.Replace (text, """^/gift\s+([\w]+\s+(\d+\s+)?)?""", "")
+        Regex.Replace (text, """^/gift\s+([\w]+\s+((\d+|NULL)\s+)?)?""", "")
 
     let private nicoLiveMssageMap =
         dict [
@@ -92,6 +96,15 @@ module CommentMessageConverter =
                     Message = m.Text |? "";
                     Name = "";
                     CommentSource = "NicoliveAd";
+                    Timestamp = postedDateToUnixTime m.PostedAt;
+                }
+            );
+            (NicoSitePlugin.NicoMessageType.Info, fun (message: NicoSitePlugin.INicoMessage) ->
+                let m = message :?> NicoSitePlugin.INicoInfo
+                Some {
+                    Message = m.Text |? "";
+                    Name = "";
+                    CommentSource = "NicoliveInfo";
                     Timestamp = postedDateToUnixTime m.PostedAt;
                 }
             );

@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (c) 2020 oO (https://github.com/oocytanb)
+// The plugin interface is derived from [MultiCommentViewer | Copyright (c) ryu-s](https://github.com/CommentViewerCollection/MultiCommentViewer)
+
 namespace CytanbVciCommentSourcePlugin
 
 open System.ComponentModel.Composition
@@ -18,12 +22,17 @@ type CommentSourcePlugin () =
     static let pastCommentTime = System.TimeSpan.FromMinutes 10.
 
     static let assemblyResolver =
+        let systemReactiveName = "System.Reactive"
         let fsharpCoreName = "FSharp.Core"
 
         AssemblyVersionResolver.register [
             (
-                new System.Reflection.AssemblyName (Name = fsharpCoreName),
-                new System.Reflection.AssemblyName (Name = fsharpCoreName)
+                new System.Reflection.AssemblyName (systemReactiveName),
+                new System.Reflection.AssemblyName (sprintf "%s, Version=4.4.0.0" systemReactiveName)
+            );
+            (
+                new System.Reflection.AssemblyName (fsharpCoreName),
+                new System.Reflection.AssemblyName (fsharpCoreName)
             )
         ]
 
@@ -61,14 +70,16 @@ type CommentSourcePlugin () =
             )
         |> Observable.filter (Seq.isEmpty >> not)
         |> Observable.subscribe (fun entries ->
-            try
-                LuaScriptIO.write entries settingsVM.OutputFilePath.Value
-            with
-                | exn ->
-                    settingsVM.StatusMessage.Value <-
+            let msg =
+                try
+                    LuaScriptIO.write entries settingsVM.OutputFilePath.Value
+                    ""
+                with
+                    | exn ->
                         sprintf "%s : %s"
                         <| resources.GetString("WriteFileError")
                         <| exn.Message
+            settingsVM.StatusMessage.Value <- msg
         )
 
     let disposable =

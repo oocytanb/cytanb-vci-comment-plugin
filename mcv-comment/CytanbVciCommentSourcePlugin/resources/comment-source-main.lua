@@ -4,7 +4,7 @@
 local settings = {
     enableDebugging = false,
     queueCapacity = 128,
-    intervalTime = TimeSpan.FromSeconds(1),
+    intervalTime = TimeSpan.FromMilliseconds(1000),
     pastCommentTime = TimeSpan.FromMinutes(10),
 }
 

@@ -22,18 +22,20 @@ type SettingsDialogViewModel () =
 
     static let defaultIsEnabled = false
 
-    let defaultOutputFilePath =
+    static let scriptWorkspacePath =
         try
-            Path.Combine (
-                (
-                    match SpecialFolder.LocalAppDataLow () with
-                    | None -> ""
-                    | Some(x) -> Path.Combine (x, "infiniteloop Co,Ltd", "VirtualCast", "EmbeddedScriptWorkspace")
-                ),
-                "cytanb-comment-source",
-                "main.lua")
+            match SpecialFolder.LocalAppDataLow () with
+            | None -> ""
+            | Some(x) -> Path.Combine (x, "infiniteloop Co,Ltd", "VirtualCast", "EmbeddedScriptWorkspace")
         with
         | :? System.ArgumentException -> ""
+
+    static let defaultOutputFilePath =
+        let mainFile = "main.lua"
+        try
+            Path.Combine (scriptWorkspacePath, "cytanb-comment-source", mainFile)
+        with
+        | _ -> mainFile
 
     let isEnabledProperty = new ReactivePropertySlim<bool> (defaultIsEnabled)
 
@@ -48,8 +50,15 @@ type SettingsDialogViewModel () =
                 let filePath = outputFilePathProperty.Value
                 try
                     let dirPath = Path.GetDirectoryName filePath
+                    let validDirPath =
+                        if Directory.Exists dirPath then
+                            dirPath
+                        else
+                            scriptWorkspacePath
+
                     let fileName = Path.GetFileName filePath
-                    (dirPath, fileName)
+
+                    (validDirPath, fileName)
                 with
                 | _ -> ("", filePath)
 
