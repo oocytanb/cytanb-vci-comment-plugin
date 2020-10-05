@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FsCheck.Nunit" Version="2.14.3" />
     <PackageReference Include="FSharp.Control.Reactive.Testing" Version="4.4.2" />
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.15.1" />
@@ -16,11 +17,21 @@
 
   <ItemGroup>
     <Compile Include="UtilTest.fs" />
+    <Compile Include="SettingsDialogViewModelTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CytanbVciCommentSourcePlugin\CytanbVciCommentSourcePlugin.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Plugin">
+      <HintPath>..\lib\mcv\dll\Plugin.dll</HintPath>
+    </Reference>
+    <Reference Include="SitePlugin">
+      <HintPath>..\lib\mcv\dll\SitePlugin.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
