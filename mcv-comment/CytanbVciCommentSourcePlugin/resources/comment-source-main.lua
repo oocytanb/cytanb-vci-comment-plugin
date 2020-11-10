@@ -6,6 +6,7 @@ local settings = {
     queueCapacity = 128,
     intervalTime = TimeSpan.FromMilliseconds(1000),
     pastCommentTime = TimeSpan.FromMinutes(10),
+    maxAvatarListLength = 32
 }
 
 ---@class commentMessageEntry
@@ -32,7 +33,23 @@ if vci.assets.IsMine then
 
     local lastSentTime = TimeSpan.Zero
 
-    local UpdateCw = cytanb.CreateUpdateRoutine(
+    -- アバターの一覧をダンプする
+    local dumpAvatarList = function ()
+        local avatarList = vci.studio.GetAvatars()
+        if avatarList then
+            for i = 1, settings.maxAvatarListLength do
+                local ava = avatarList[i]
+                if not ava then
+                    break
+                end
+                local id = ava and ava.GetId() or ''
+                local name = ava and ava.GetName() or ''
+                cytanb.LogInfo(name, ' : ', id)
+            end
+        end
+    end
+
+    local UpdateCw; UpdateCw = cytanb.CreateUpdateRoutine(
         function (deltaTime, unscaledDeltaTime)
             ---@type commentMessageEntry
             local now = vci.me.UnscaledTime
@@ -51,6 +68,20 @@ if vci.assets.IsMine then
         function ()
             cytanb.LogTrace('OnLoad')
             vciLoaded = true
+
+            -- アバターリストをダンプする
+            dumpAvatarList()
+
+            vci.message.On('notification', function (sender, name, message)
+                if message == 'joined' or message == 'left' then
+                    dumpAvatarList()
+                end
+            end)
+        end,
+
+        function (reason)
+            cytanb.LogError('Error on update routine: ', reason)
+            UpdateCw = function () end
         end
     )
 
