@@ -12,8 +12,8 @@ type SettingsData = JsonProvider<"""
 {
     "version": 1,
     "isEnabled": false,
-    "outputFilePath": "main.lua"
-
+    "outputFilePath": "main.lua",
+    "isNicoLiveAndShowroomNormalCommentEnabled": true
 }
 """>
 
@@ -26,7 +26,12 @@ type SettingsDialogViewModel () =
         try
             match SpecialFolder.LocalAppDataLow () with
             | None -> ""
-            | Some(x) -> Path.Combine (x, "infiniteloop Co,Ltd", "VirtualCast", "EmbeddedScriptWorkspace")
+            | Some(x) -> Path.Combine (
+                            x,
+                            "infiniteloop Co,Ltd",
+                            "VirtualCast",
+                            "EmbeddedScriptWorkspace"
+                         )
         with
         | :? System.ArgumentException -> ""
 
@@ -37,9 +42,14 @@ type SettingsDialogViewModel () =
         with
         | _ -> mainFile
 
+    static let defaultIsNicoLiveAndShowroomNormalCommentEnabled = true
+
     let isEnabledProperty = new ReactivePropertySlim<bool> (defaultIsEnabled)
 
     let outputFilePathProperty = new ReactivePropertySlim<string> (defaultOutputFilePath)
+
+    let isNicoLiveAndShowroomNormalCommentEnabledProperty =
+        new ReactivePropertySlim<bool> (defaultIsNicoLiveAndShowroomNormalCommentEnabled)
 
     let showFileDialogCommand = new ReactiveCommand ()
 
@@ -87,6 +97,8 @@ type SettingsDialogViewModel () =
         |> Observable.subscribe (fun _ ->
             isEnabledProperty.Value <- defaultIsEnabled
             outputFilePathProperty.Value <- defaultOutputFilePath
+            isNicoLiveAndShowroomNormalCommentEnabledProperty.Value
+                <- defaultIsNicoLiveAndShowroomNormalCommentEnabled
         )
 
     let statusMessageProperty = new ReactivePropertySlim<string> ("")
@@ -97,6 +109,7 @@ type SettingsDialogViewModel () =
         Disposables.compose [
             isEnabledProperty;
             outputFilePathProperty;
+            isNicoLiveAndShowroomNormalCommentEnabledProperty;
             showFileDialogCommand;
             showFileDialogCommandDisposable;
             loadDefaultsCommand;
@@ -121,6 +134,15 @@ type SettingsDialogViewModel () =
 
     member val ShowFileDialogCommand = showFileDialogCommand with get
 
+    member val IsNicoLiveAndShowroomNormalCommentEnabled =
+        isNicoLiveAndShowroomNormalCommentEnabledProperty with get
+
+    member val IsNicoLiveNormalCommentEnabled =
+        isNicoLiveAndShowroomNormalCommentEnabledProperty with get
+
+    member val IsShowroomNormalCommentEnabled =
+        isNicoLiveAndShowroomNormalCommentEnabledProperty with get
+
     member val LoadDefaultsCommand = loadDefaultsCommand with get
 
     member val StatusMessage = statusMessageProperty with get
@@ -130,6 +152,8 @@ type SettingsDialogViewModel () =
             ("version", JsonValue.Number <| decimal version);
             ("isEnabled", JsonValue.Boolean isEnabledProperty.Value);
             ("outputFilePath", JsonValue.String outputFilePathProperty.Value);
+            ("isNicoLiveAndShowroomNormalCommentEnabled",
+                JsonValue.Boolean isNicoLiveAndShowroomNormalCommentEnabledProperty.Value);
         |]
         j.WriteTo (writer, JsonSaveOptions.None)
 
@@ -145,6 +169,10 @@ type SettingsDialogViewModel () =
                     | value -> value
                 with
                 | _ -> defaultOutputFilePath
+
+            isNicoLiveAndShowroomNormalCommentEnabledProperty.Value <-
+                try j.IsNicoLiveAndShowroomNormalCommentEnabled with
+                    | _ -> defaultIsNicoLiveAndShowroomNormalCommentEnabled
 
     interface INotifyPropertyChanged with
         [<CLIEvent>]

@@ -26,7 +26,7 @@ jobs:
       - name: Download
         shell: bash
         run: |
-          curl https://int-main.net/app/MultiCommentViewer_v0.5.29_stable.zip >> mcv.zip
+          curl https://int-main.net/app/MultiCommentViewer_v0.5.55_stable.zip >> mcv.zip
 
       - name: Extract
         run: |

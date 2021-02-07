@@ -12,9 +12,9 @@
   <ItemGroup>
     <Compile Include="SpecialFolder.fs" />
     <Compile Include="AssemblyVersionResolver.fs" />
+    <Compile Include="SettingsDialogViewModel.fs" />
     <Compile Include="CommentMessage.fs" />
     <Compile Include="LuaScriptIO.fs" />
-    <Compile Include="SettingsDialogViewModel.fs" />
     <Resource Include="SettingsDialog.xaml" />
     <Compile Include="SettingsDialog.xaml.fs" />
     <Compile Include="CommentSourcePlugin.fs" />
@@ -32,14 +32,17 @@
     <Reference Include="NicoLiveIF">
       <HintPath>..\lib\mcv\dll\NicoLiveIF.dll</HintPath>
     </Reference>
-    <Reference Include="NicoSitePlugin">
-      <HintPath>..\lib\mcv\dll\NicoSitePlugin.dll</HintPath>
+    <Reference Include="NicoSitePlugin2">
+      <HintPath>..\lib\mcv\dll\NicoSitePlugin2.dll</HintPath>
     </Reference>
     <Reference Include="Plugin">
       <HintPath>..\lib\mcv\dll\Plugin.dll</HintPath>
     </Reference>
     <Reference Include="PluginCommon">
       <HintPath>..\lib\mcv\dll\PluginCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="ShowRoomIF">
+      <HintPath>..\lib\mcv\dll\ShowRoomIF.dll</HintPath>
     </Reference>
     <Reference Include="SitePlugin">
       <HintPath>..\lib\mcv\dll\SitePlugin.dll</HintPath>

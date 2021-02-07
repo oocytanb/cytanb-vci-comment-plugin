@@ -36,100 +36,164 @@ module CommentMessageConverter =
 
     let private youtubeLiveMssageMap =
         dict [
-            (YouTubeLiveSitePlugin.YouTubeLiveMessageType.Comment, fun (message: YouTubeLiveSitePlugin.IYouTubeLiveMessage) ->
-                let m = message :?> YouTubeLiveSitePlugin.IYouTubeLiveComment
-                Some {
-                    Message = m.CommentItems.ToText ();
-                    Name = m.NameItems.ToText ();
-                    CommentSource = "YouTubeLive";
-                    Timestamp = postedDateToUnixTime m.PostedAt;
-                }
+            (YouTubeLiveSitePlugin.YouTubeLiveMessageType.Comment,
+                fun (message: YouTubeLiveSitePlugin.IYouTubeLiveMessage)
+                    (_: IMessageMetadata)
+                    (_: SettingsDialogViewModel) ->
+                        let m = message :?> YouTubeLiveSitePlugin.IYouTubeLiveComment
+                        Some {
+                            Message = m.CommentItems.ToText ();
+                            Name = m.NameItems.ToText ();
+                            CommentSource = "YouTubeLive";
+                            Timestamp = postedDateToUnixTime m.PostedAt;
+                        }
             );
-            (YouTubeLiveSitePlugin.YouTubeLiveMessageType.Superchat, fun (message: YouTubeLiveSitePlugin.IYouTubeLiveMessage) ->
-                let m = message :?> YouTubeLiveSitePlugin.IYouTubeLiveSuperchat
-                Some {
-                    Message = m.CommentItems.ToText ();
-                    Name = m.NameItems.ToText ();
-                    CommentSource = "YouTubeLiveSuperchat";
-                    Timestamp = postedDateToUnixTime m.PostedAt;
-                }
+            (YouTubeLiveSitePlugin.YouTubeLiveMessageType.Superchat,
+                fun (message: YouTubeLiveSitePlugin.IYouTubeLiveMessage)
+                    (_: IMessageMetadata)
+                    (_: SettingsDialogViewModel) ->
+                        let m = message :?> YouTubeLiveSitePlugin.IYouTubeLiveSuperchat
+                        Some {
+                            Message = m.CommentItems.ToText ();
+                            Name = m.NameItems.ToText ();
+                            CommentSource = "YouTubeLiveSuperchat";
+                            Timestamp = postedDateToUnixTime m.PostedAt;
+                        }
             );
         ]
 
-    let private parseNicoLiveItem text =
-        Regex.Replace (text, """^/gift\s+([\w]+\s+((\d+|NULL)\s+)?)?""", "")
+    let private parseNicoLiveSpi text =
+        Regex.Replace (text, """^/spi\s*""", "")
 
     let private nicoLiveMssageMap =
         dict [
-            (NicoSitePlugin.NicoMessageType.Comment, fun (message: NicoSitePlugin.INicoMessage) ->
-                let m = message :?> NicoSitePlugin.INicoComment
-                let chat = NicoSitePlugin.Chat.Parse m.Raw
-                let premium = chat.Premium
-
-                if premium.HasValue
-                then
-                    let p = premium.Value
-                    // 1: Premium user, 3: Broadcaster (Need to confirm)
-                    if p = 2 || p = 3 || p = 6 || p = 7
-                    then
+            (NicoSitePlugin.NicoMessageType.Comment,
+                fun (message: NicoSitePlugin.INicoMessage)
+                    (_: IMessageMetadata)
+                    (settings: SettingsDialogViewModel) ->
+                        if settings.IsNicoLiveNormalCommentEnabled.Value then
+                            let m = message :?> NicoSitePlugin.INicoComment
+                            Some {
+                                Message = m.Text |? "";
+                                Name = m.UserName |? "";
+                                CommentSource = "Nicolive";
+                                Timestamp = postedDateToUnixTime m.PostedAt;
+                            }
+                        else
+                            None
+            );
+            (NicoSitePlugin.NicoMessageType.Ad,
+                fun (message: NicoSitePlugin.INicoMessage)
+                    (_: IMessageMetadata)
+                    (_: SettingsDialogViewModel) ->
+                        let m = message :?> NicoSitePlugin.INicoAd
                         Some {
                             Message = m.Text |? "";
-                            Name = m.UserName |? "";
-                            CommentSource = "NicoliveBroadcaster";
+                            Name = "";
+                            CommentSource = "NicoliveAd";
                             Timestamp = postedDateToUnixTime m.PostedAt;
                         }
-                    else None
-                else None
             );
-            (NicoSitePlugin.NicoMessageType.Item, fun (message: NicoSitePlugin.INicoMessage) ->
-                let m = message :?> NicoSitePlugin.INicoItem
-                Some {
-                    Message = parseNicoLiveItem (m.Text |? "");
-                    Name = "";
-                    CommentSource = "NicoliveItem";
-                    Timestamp = postedDateToUnixTime m.PostedAt;
-                }
+            (NicoSitePlugin.NicoMessageType.Item,
+                fun (message: NicoSitePlugin.INicoMessage)
+                    (_: IMessageMetadata)
+                    (_: SettingsDialogViewModel) ->
+                        let m = message :?> NicoSitePlugin.INicoGift
+                        Some {
+                            Message = m.Text |? "";
+                            Name = "";
+                            CommentSource = "NicoliveItem";
+                            Timestamp = postedDateToUnixTime m.PostedAt;
+                        }
             );
-            (NicoSitePlugin.NicoMessageType.Ad, fun (message: NicoSitePlugin.INicoMessage) ->
-                let m = message :?> NicoSitePlugin.INicoAd
-                Some {
-                    Message = m.Text |? "";
-                    Name = "";
-                    CommentSource = "NicoliveAd";
-                    Timestamp = postedDateToUnixTime m.PostedAt;
-                }
+            (NicoSitePlugin.NicoMessageType.Spi,
+                fun (message: NicoSitePlugin.INicoMessage)
+                    (_: IMessageMetadata)
+                    (_: SettingsDialogViewModel) ->
+                        let m = message :?> NicoSitePlugin.INicoSpi
+                        Some {
+                            Message = parseNicoLiveSpi (m.Text |? "");
+                            Name = "";
+                            CommentSource = "NicoliveSpi";
+                            Timestamp = postedDateToUnixTime m.PostedAt;
+                        }
             );
-            (NicoSitePlugin.NicoMessageType.Info, fun (message: NicoSitePlugin.INicoMessage) ->
-                let m = message :?> NicoSitePlugin.INicoInfo
-                Some {
-                    Message = m.Text |? "";
-                    Name = "";
-                    CommentSource = "NicoliveInfo";
-                    Timestamp = postedDateToUnixTime m.PostedAt;
-                }
+            (NicoSitePlugin.NicoMessageType.Emotion,
+                fun (message: NicoSitePlugin.INicoMessage)
+                    (_: IMessageMetadata)
+                    (_: SettingsDialogViewModel) ->
+                        let m = message :?> NicoSitePlugin.INicoEmotion
+                        Some {
+                            Message = m.Content |? "";
+                            Name = "";
+                            CommentSource = "NicoliveEmotion";
+                            Timestamp = postedDateToUnixTime m.PostedAt;
+                        }
+            );
+            (NicoSitePlugin.NicoMessageType.Info,
+                fun (message: NicoSitePlugin.INicoMessage)
+                    (_: IMessageMetadata)
+                    (_: SettingsDialogViewModel) ->
+                        let m = message :?> NicoSitePlugin.INicoInfo
+                        Some {
+                            Message = m.Text |? "";
+                            Name = "";
+                            CommentSource = "NicoliveInfo";
+                            Timestamp = postedDateToUnixTime m.PostedAt;
+                        }
             );
         ]
 
-    let private applySiteMessage keyType message (map: System.Collections.Generic.IDictionary<_, _>) =
+    let private showroomMssageMap =
+        dict [
+            (ShowRoomSitePlugin.ShowRoomMessageType.Comment,
+                fun (message: ShowRoomSitePlugin.IShowRoomMessage)
+                    (_: IMessageMetadata)
+                    (settings: SettingsDialogViewModel) ->
+                        if settings.IsShowroomNormalCommentEnabled.Value then
+                            let m = message :?> ShowRoomSitePlugin.IShowRoomComment
+                            Some {
+                                Message = m.Text |? "";
+                                Name = m.UserName |? "";
+                                CommentSource = "Showroom";
+                                Timestamp = postedDateToUnixTime m.PostedAt;
+                            }
+                        else
+                            None
+            );
+        ]
+
+    let private applySiteMessage keyType message metadata settings (map: System.Collections.Generic.IDictionary<_, _>) =
         if map.ContainsKey keyType
-        then map.Item keyType <| message
+        then map.Item keyType message metadata settings
         else None
 
     let private siteMessageMap =
         dict [
-            SiteType.YouTubeLive, fun (message: SitePlugin.ISiteMessage) ->
-                let m = message :?> YouTubeLiveSitePlugin.IYouTubeLiveMessage
-                applySiteMessage m.YouTubeLiveMessageType m youtubeLiveMssageMap
-            SiteType.NicoLive, fun (message: SitePlugin.ISiteMessage) ->
-                let m = message :?> NicoSitePlugin.INicoMessage
-                applySiteMessage m.NicoMessageType m nicoLiveMssageMap
-            SiteType.ShowRoom, fun (message: SitePlugin.ISiteMessage) -> None;
+            SiteType.YouTubeLive,
+                fun (message: SitePlugin.ISiteMessage)
+                    (metadata: IMessageMetadata)
+                    (settings: SettingsDialogViewModel) ->
+                        let m = message :?> YouTubeLiveSitePlugin.IYouTubeLiveMessage
+                        applySiteMessage m.YouTubeLiveMessageType m metadata settings youtubeLiveMssageMap
+            SiteType.NicoLive,
+                fun (message: SitePlugin.ISiteMessage)
+                    (metadata: IMessageMetadata)
+                    (settings: SettingsDialogViewModel) ->
+                        let m = message :?> NicoSitePlugin.INicoMessage
+                        applySiteMessage m.NicoMessageType m metadata settings nicoLiveMssageMap
+            SiteType.ShowRoom,
+                fun (message: SitePlugin.ISiteMessage)
+                    (metadata: IMessageMetadata)
+                    (settings: SettingsDialogViewModel) ->
+                        let m = message :?> ShowRoomSitePlugin.IShowRoomMessage
+                        applySiteMessage m.ShowRoomMessageType m metadata settings showroomMssageMap
         ]
 
-    let toCommentMessage (message: SitePlugin.ISiteMessage) =
+    let toCommentMessage (message: ISiteMessage) (metadata: IMessageMetadata) (settings: SettingsDialogViewModel) =
         let t = message.SiteType
         if siteMessageMap.ContainsKey t
-        then siteMessageMap.Item t <| message
+        then siteMessageMap.Item t message metadata settings
         else
             match Tools.GetData message with
             | struct(null, null) -> None

@@ -108,13 +108,13 @@ type CommentSourcePlugin () =
 
         override val Host = null with get, set
 
-        override this.OnMessageReceived (message, messageMetadata) =
+        override this.OnMessageReceived (message, metadata) =
             if settingsVM.IsEnabled.Value then
                 Option.iter
                 <| fun (m: CommentMessage) ->
                     if m.Timestamp >= timestampThreshold then
                         Subject.onNext m messageStream |> ignore
-                <| CommentMessageConverter.toCommentMessage message
+                <| CommentMessageConverter.toCommentMessage message metadata settingsVM
 
         override this.OnLoaded () =
             try

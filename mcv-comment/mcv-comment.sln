@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CytanbVciCommentSourcePlugin", "CytanbVciCommentSourcePlugin\CytanbVciCommentSourcePlugin.fsproj", "{F217E7CD-96F5-471B-A9B7-8BE1D2E381BD}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "CytanbVciCommentSourcePlugin", "CytanbVciCommentSourcePlugin\CytanbVciCommentSourcePlugin.fsproj", "{F217E7CD-96F5-471B-A9B7-8BE1D2E381BD}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "CytanbVciCommentSourcePlugin.Test", "CytanbVciCommentSourcePlugin.Test\CytanbVciCommentSourcePlugin.Test.fsproj", "{B2938F17-0DF5-4E36-8410-F1EEFC7F3DAF}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "CytanbVciCommentSourcePlugin.Test", "CytanbVciCommentSourcePlugin.Test\CytanbVciCommentSourcePlugin.Test.fsproj", "{B2938F17-0DF5-4E36-8410-F1EEFC7F3DAF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F441CEDE-40D7-4B61-85A4-2EB8AA71C325}"
 	ProjectSection(SolutionItems) = preProject
