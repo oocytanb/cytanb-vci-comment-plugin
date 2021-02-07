@@ -24,9 +24,8 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Download
-        shell: bash
         run: |
-          curl https://int-main.net/app/MultiCommentViewer_v0.5.55_stable.zip >> mcv.zip
+          Invoke-WebRequest https://int-main.net/app/MultiCommentViewer_v0.5.55_stable.zip -OutFile mcv.zip
 
       - name: Extract
         run: |
