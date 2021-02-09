@@ -4,10 +4,12 @@
 
 - コメントメッセージの実験用プロジェクトです。
 
-- [MultiCommentViewer | Copyright (c) ryu-s](https://github.com/CommentViewerCollection/MultiCommentViewer) (v0.5.29) のプラグインです。
+- [MultiCommentViewer | Copyright (c) ryu-s](https://github.com/CommentViewerCollection/MultiCommentViewer) (v0.5.56) のプラグインです。
 
 - [cytanb.lua](https://github.com/oocytanb/cytanb-vci-lua) をモジュールとして設定してある VCI と組み合わせて動作します。
 (例: [cytanb-comment-source](https://github.com/oocytanb/oO-vci-pack) の VCI)
+
+- 関連するソフトウェアや、サービスのアップデートにより、正常に動作しなくなる可能性があります。よく理解された上で、ご使用ください。
 
 ## ビルド
 
@@ -25,6 +27,8 @@
 
 1. ソリューションのビルドを行います。
 
-1. 出力されたファイル群を、MultiCommentViewer の `plugins` ディレクトリにコピーします。
+## 実行手順
 
-1. MultiCommentViewer を起動し、プラグインメニューに `cytanb-vci-comment-source` が追加されていたら、成功です。
+1. `CytanbVciCommentSourcePlugin` のプラグインファイル群を、MultiCommentViewer の `plugins` ディレクトリに展開します。
+
+1. MultiCommentViewer を起動し、プラグインメニューから `cytanb-vci-comment-source` を開き、設定を有効にします。

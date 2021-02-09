@@ -2,10 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
+    <Version>1.0.3</Version>
+    <Copyright>Copyright © 2020 oO</Copyright>
+    <Authors>oO</Authors>
+    <Company>cytanb</Company>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Util.fs" />
   </ItemGroup>
 
@@ -31,9 +34,6 @@
   <ItemGroup>
     <Reference Include="NicoLiveIF">
       <HintPath>..\lib\mcv\dll\NicoLiveIF.dll</HintPath>
-    </Reference>
-    <Reference Include="NicoSitePlugin2">
-      <HintPath>..\lib\mcv\dll\NicoSitePlugin2.dll</HintPath>
     </Reference>
     <Reference Include="Plugin">
       <HintPath>..\lib\mcv\dll\Plugin.dll</HintPath>

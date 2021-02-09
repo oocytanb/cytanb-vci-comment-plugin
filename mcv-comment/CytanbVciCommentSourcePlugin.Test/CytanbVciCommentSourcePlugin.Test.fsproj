@@ -5,6 +5,9 @@
 
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>false</GenerateProgramFile>
+    <Company>cytanb</Company>
+    <Authors>oO</Authors>
+    <Copyright>Copyright © 2020 oO</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
