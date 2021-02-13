@@ -4,7 +4,7 @@
 
 - コメントメッセージの実験用プロジェクトです。
 
-- [MultiCommentViewer | Copyright (c) ryu-s](https://github.com/CommentViewerCollection/MultiCommentViewer) (v0.5.56) のプラグインです。
+- [MultiCommentViewer | Copyright (c) ryu-s](https://github.com/CommentViewerCollection/MultiCommentViewer) のプラグインです。
 
 - [cytanb.lua](https://github.com/oocytanb/cytanb-vci-lua) をモジュールとして設定してある VCI と組み合わせて動作します。
 (例: [cytanb-comment-source](https://github.com/oocytanb/oO-vci-pack) の VCI)
