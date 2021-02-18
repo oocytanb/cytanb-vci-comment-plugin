@@ -190,17 +190,37 @@ module CommentMessageConverter =
                         applySiteMessage m.ShowRoomMessageType m metadata settings showroomMssageMap
         ]
 
+    let toUserName optName (metadata: IMessageMetadata) =
+        if System.String.IsNullOrEmpty(optName)
+            then ""
+            else
+                let user = metadata.User
+                if isNull user
+                    then optName
+                    else
+                        let optNick = user.Nickname
+                        if System.String.IsNullOrEmpty optNick then optName else optNick
+
     let toCommentMessage (message: ISiteMessage) (metadata: IMessageMetadata) (settings: SettingsDialogViewModel) =
         let t = message.SiteType
         if siteMessageMap.ContainsKey t
-        then siteMessageMap.Item t message metadata settings
-        else
-            match Tools.GetData message with
-            | struct(null, null) -> None
-            | struct(optName, optComment) ->
+            then siteMessageMap.Item t message metadata settings
+            else
+                match Tools.GetData message with
+                | struct(null, null) -> None
+                | struct(optName, optComment) ->
+                    Some {
+                        Message = optComment |? "";
+                        Name = optName |? "";
+                        CommentSource = siteTypeToCommentSource message.SiteType;
+                        Timestamp = nowUnixTime ();
+                    }
+        |> Option.bind (
+            fun { Message = m; Name = n; CommentSource = cs; Timestamp = ts } ->
                 Some {
-                    Message = optComment |? "";
-                    Name = optName |? "";
-                    CommentSource = siteTypeToCommentSource message.SiteType;
-                    Timestamp = nowUnixTime ();
+                    Message = m;
+                    Name = toUserName n metadata;
+                    CommentSource = cs;
+                    Timestamp = ts
                 }
+            )

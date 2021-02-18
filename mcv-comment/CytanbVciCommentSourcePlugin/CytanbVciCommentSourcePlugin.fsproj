@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
-    <Version>1.0.3</Version>
+    <Version>1.1.0</Version>
     <Copyright>Copyright © 2020 oO</Copyright>
     <Authors>oO</Authors>
     <Company>cytanb</Company>
@@ -39,7 +39,7 @@
       <HintPath>..\lib\mcv\dll\Plugin.dll</HintPath>
     </Reference>
     <Reference Include="PluginCommon">
-      <HintPath>..\lib\mcv\dll\PluginCommon.dll</HintPath>
+      <HintPath>..\lib\mcv\plugins\Yoyaku\PluginCommon.dll</HintPath>
     </Reference>
     <Reference Include="ShowRoomIF">
       <HintPath>..\lib\mcv\dll\ShowRoomIF.dll</HintPath>
