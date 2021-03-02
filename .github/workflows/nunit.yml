@@ -25,7 +25,7 @@ jobs:
 
       - name: Download
         run: |
-          Invoke-WebRequest https://int-main.net/app/MultiCommentViewer_v0.6.1_beta.zip -OutFile mcv.zip
+          Invoke-WebRequest https://int-main.net/app/MultiCommentViewer_v0.6.3_stable.zip -OutFile mcv.zip
 
       - name: Extract
         run: |
